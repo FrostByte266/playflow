@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CAST_MEMBER
+  MANAGER
+  TECHNICIAN
+}
+
+enum IssueType {
+  DOWN
+  SAFETY
+  CLEANING
+  NON_CRITICAL
+}
+
+enum IssueState {
+  REPORTED
+  CONFIRMED
+  AWAITING_RESOLUTION
+  RESOLVED
+}
+
+enum TapTime {
+  AM
+  PM
+}
+
+model Employee {
+  id                Int       @id
+  name              String
+  role              Role      @default(CAST_MEMBER)
+  pin               String
+  reportedIssues    Issue[]
+  performedGameTaps GameTap[]
+}
+
+model Issue {
+  id           Int        @id @default(autoincrement())
+  reportedBy   Employee   @relation(fields: [reportedById], references: [id])
+  reportedById Int
+  Game         Game       @relation(fields: [gameId], references: [id])
+  gameId       Int        @unique
+  date         DateTime   @default(now())
+  type         IssueType  @default(DOWN)
+  state        IssueState @default(REPORTED)
+  description  String
+}
+
+model Game {
+  id              Int             @id @default(autoincrement())
+  name            String
+  manufacturer    String
+  photo           String
+  issues          Issue[]
+  gameTapPosition Int             @unique @default(autoincrement())
+  GameTap         GameOnGameTap[]
+}
+
+model GameTap {
+  id            Int             @id @default(autoincrement())
+  date          DateTime        @default(now())
+  time          TapTime
+  performedBy   Employee        @relation(fields: [performedById], references: [id])
+  performedById Int             @unique
+  tappedGames   GameOnGameTap[]
+}
+
+model GameOnGameTap {
+  game   Game    @relation(fields: [gameId], references: [id])
+  gameId Int
+  tap    GameTap @relation(fields: [tapId], references: [id])
+  tapId  Int
+
+  @@id([gameId, tapId])
+}

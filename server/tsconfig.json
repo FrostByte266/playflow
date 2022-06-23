@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "resolveJsonModule": true,
+      "moduleResolution": "node",
+      "target": "es6",
+      "module": "commonjs",
+      "rootDir": "./",
+      "outDir": "./build/backend",
+      "esModuleInterop": true,
+      "strict": true,
+      "allowJs": true,
+    }
+  }
