@@ -1,11 +1,16 @@
 import type { RequestHandler } from './__types/[id]'
 import { Prisma } from '@prisma/client'
 
-import prisma from '$lib/prisma'
+import prisma, { employeeSelectOpts } from '$lib/prisma'
 import Codes from 'http-status-codes'
 
 export const get: RequestHandler = async ({ params }) => {
-    const user = await prisma.employee.findFirst({ where: { id: Number(params.id)} })
+    const user = await prisma.employee.findFirst({
+        where: {
+            id: Number(params.id)
+        },
+        select: employeeSelectOpts
+    })
     if (user) {
         return {
             body: user
@@ -26,7 +31,8 @@ export const patch: RequestHandler = async ({ request, params }) => {
             where: {
                 id: Number(params.id)
             }, 
-            data: await request.json()
+            data: await request.json(),
+            select: employeeSelectOpts
         })
 
         return {

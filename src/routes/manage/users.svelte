@@ -3,7 +3,7 @@
     import type { Load } from './__types/users'
 
     export const load: Load = async ({ fetch }) => {
-        const res = await fetch(apiRoute('/employees'), defaultFetchProps)
+        const res = await fetch('/api/employees')
         return {
             props: {
                 employees: await res.json()
@@ -22,6 +22,7 @@
     import type { IEmployee } from '$lib/types/employee'
 
     export let employees: Array<IEmployee>
+    console.log(employees)
 
     async function addNew(e: CustomEvent<IEmployee>) {
         console.log(JSON.stringify(e.detail))
@@ -46,13 +47,14 @@
 <div class="flex justify-between items-center">
     <h1 class="text-3xl text-center pl-5 select-none cursor-default">Managing Users</h1>
     <div class="p-5">
-        <EmployeeInfo employee={$session.user} />
+        <!-- <EmployeeInfo employee={$session.user} /> -->
     </div>
 </div>
 
 <div class="grid-cols-3 auto-rows-auto items-center justify-center">
     <NewEmployee on:created={addNew} />
     {#each employees as employee (employee.ID)}
-        <EditableEmployee {employee} />
+        <!-- <EditableEmployee {employee} /> -->
+        {JSON.stringify(employee)}
     {/each}
 </div>

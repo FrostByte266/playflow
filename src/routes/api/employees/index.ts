@@ -1,10 +1,12 @@
 import type { RequestHandler } from './__types'
 
-import prisma from '$lib/prisma'
+import prisma, { employeeSelectOpts } from '$lib/prisma'
 import Codes from 'http-status-codes'
 
 export const get: RequestHandler = async () => {
-    const all = await prisma.employee.findMany()
+    const all = await prisma.employee.findMany({
+        select: employeeSelectOpts
+    })
 
     return {
         body: all
