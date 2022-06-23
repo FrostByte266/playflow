@@ -35,17 +35,17 @@ export const patch: RequestHandler = async ({ request, params }) => {
 
     } catch(e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
-            if (e.code === 'P2025') { // Failed to find matching record
-                return {
-                    status: Codes.NOT_FOUND,
-                    body: { error: 'The requested user does not exist' }
-                }
-            } else {
-                console.dir(e, {depth: null})
-                return {
-                    status: Codes.INTERNAL_SERVER_ERROR,
-                    body: { error: 'An unknown database error has occured' }
-                }
+            switch (e.code) {
+                case 'P2025':
+                    return {
+                        status: Codes.NOT_FOUND,
+                        body: { error: 'The requested employee does not exist' }
+                    }
+                default:
+                    return {
+                        status: Codes.INTERNAL_SERVER_ERROR,
+                        body: { error: 'An unexpected database error has occured' }
+                    }
             }
         } else {
             console.dir(e, {depth: null})
