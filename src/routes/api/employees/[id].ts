@@ -56,3 +56,39 @@ export const patch: RequestHandler = async ({ request, params }) => {
         }
     }
 }
+
+export const del: RequestHandler = async ({ params }) => {
+    try {
+        await prisma.employee.delete({
+            where: {
+                id: Number(params.id)
+            }, 
+        })
+
+        return {
+            status: Codes.NO_CONTENT
+        }
+
+    } catch(e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            switch (e.code) {
+                case 'P2025':
+                    return {
+                        status: Codes.NOT_FOUND,
+                        body: { error: 'The requested employee does not exist' }
+                    }
+                default:
+                    return {
+                        status: Codes.INTERNAL_SERVER_ERROR,
+                        body: { error: 'An unexpected database error has occured' }
+                    }
+            }
+        } else {
+            console.dir(e, {depth: null})
+            return {
+                status: Codes.INTERNAL_SERVER_ERROR,
+                body: { error: 'An unknown server error has occured' }
+            }
+        }
+    }
+}
