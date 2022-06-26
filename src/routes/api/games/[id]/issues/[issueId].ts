@@ -1,25 +1,24 @@
-import type { RequestHandler } from './__types/[id]'
+import type { RequestHandler } from './__types/[issueId]'
 import { Prisma } from '@prisma/client'
 
 import prisma from '$lib/prisma'
 import Codes from 'http-status-codes'
 
 export const get: RequestHandler = async ({ params }) => {
-    const game = await prisma.game.findFirst({
+    const issue = await prisma.issue.findFirst({
         where: {
-            id: Number(params.id)
-        }, include: {
-            issues: true
-        }})
-    if (game) {
+            id: Number(params.issueId)
+        }
+    })
+    if (issue) {
         return {
-            body: game
+            body: issue
         }
     } else {
         return {
             status: Codes.NOT_FOUND,
             body: {
-                error: 'The game game does not exist'
+                error: 'The requested issue does not exist'
             }
         }
     }
@@ -27,11 +26,11 @@ export const get: RequestHandler = async ({ params }) => {
 
 export const patch: RequestHandler = async ({ request, params }) => {
     try {
-        const updated = await prisma.game.update({
+        const updated = await prisma.issue.update({
             where: {
-                id: Number(params.id)
+                id: Number(params.issueId)
             }, 
-            data: await request.json()
+            data: await request.json(),
         })
 
         return {
@@ -44,7 +43,7 @@ export const patch: RequestHandler = async ({ request, params }) => {
                 case 'P2025':
                     return {
                         status: Codes.NOT_FOUND,
-                        body: { error: 'The requested game does not exist' }
+                        body: { error: 'The requested issue does not exist' }
                     }
                 default:
                     return {
@@ -64,9 +63,9 @@ export const patch: RequestHandler = async ({ request, params }) => {
 
 export const del: RequestHandler = async ({ params }) => {
     try {
-        await prisma.game.delete({
+        await prisma.issue.delete({
             where: {
-                id: Number(params.id)
+                id: Number(params.issueId)
             }, 
         })
 
@@ -80,7 +79,7 @@ export const del: RequestHandler = async ({ params }) => {
                 case 'P2025':
                     return {
                         status: Codes.NOT_FOUND,
-                        body: { error: 'The requested game does not exist' }
+                        body: { error: 'The requested issue does not exist' }
                     }
                 default:
                     return {

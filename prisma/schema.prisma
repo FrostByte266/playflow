@@ -49,7 +49,7 @@ model Issue {
   reportedBy   Employee   @relation(fields: [reportedById], references: [id])
   reportedById Int
   Game         Game       @relation(fields: [gameId], references: [id])
-  gameId       Int        @unique
+  gameId       Int        
   date         DateTime   @default(now())
   type         IssueType  @default(DOWN)
   state        IssueState @default(REPORTED)
