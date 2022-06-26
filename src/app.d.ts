@@ -22,3 +22,7 @@ declare namespace App {
 	}
 	// interface Stuff {}
 }
+
+interface ImportMetaEnv {
+	VITE_JWT_SECRET: string
+}
