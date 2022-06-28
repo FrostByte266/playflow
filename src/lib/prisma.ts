@@ -2,10 +2,6 @@
 import { PrismaClient } from '@prisma/client'
 import type { Employee as PrismaEmployee } from '@prisma/client'
 
-declare global {
-    var prisma: PrismaClient
-}
-
 // Declare prisma inside a global scope to prevent
 // creating many connections during development
 // due to HMR
