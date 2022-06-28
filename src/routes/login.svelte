@@ -32,12 +32,12 @@
         // We can use type assertions here because
         // the component that calls this function is only
         // rendered if there is a user selected
-        const res = await fetch(apiRoute('/auth/login'), {
+        const res = await fetch('/api/session', {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({
-                ID: selectedUser!.ID,
+                id: selectedUser!.id,
                 pin: enteredPin
             })
         })
@@ -78,7 +78,7 @@
             {:else}
                 <h1 class="text-3xl">Welcome #{storeNumber}. Please select a user</h1>
                 <div class="w-full p-5 gap-5 flex justify-around items-center">
-                    {#each employees as employee (employee.ID)}
+                    {#each employees as employee (employee.id)}
                         <div class="transition-transform hover:scale-125">
                             <EmployeeInfo on:click={() => selectedUser=employee} {employee} />
                         </div>

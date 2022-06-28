@@ -1,4 +1,4 @@
-import type { Handle, GetSession } from "@sveltejs/kit"
+import type { Handle, HandleError, GetSession } from "@sveltejs/kit"
 import type { Employee } from '@prisma/client'
 
 import JWT from 'jsonwebtoken'
@@ -53,3 +53,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 export const getSession: GetSession = event => event.locals
 
+export const handleError: HandleError = async ({ error, event }) => {
+    console.error(error)
+}
