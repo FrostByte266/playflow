@@ -3,6 +3,7 @@ import type { Employee } from '@prisma/client'
 
 import JWT from 'jsonwebtoken'
 import cookie from 'cookie'
+import Codes from 'http-status-codes'
 
 export const handle: Handle = async ({ event, resolve }) => {
     const unprotectedPaths: Record<string, Array<string>> = {
@@ -38,15 +39,26 @@ export const handle: Handle = async ({ event, resolve }) => {
         // If there are errors decoding the JWT, it has been altered by the client,
         // redirect to the login page to get a new one
         // Will also redirect if the JWT was expired
-        console.error(e)
-        return new Response('Redirect',
+
+        if (event.request.headers.get('Accept') === 'application/json') {
+            return new Response(JSON.stringify({
+                    message: 'The required authentication token was missing or invalid'
+            }), {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                status: Codes.UNAUTHORIZED
+            })
+        } else {
+            return new Response('Redirect',
             {
-                status: 303,
+                status: Codes.MOVED_TEMPORARILY,
                 headers: {
                     Location: '/login'
                 }
             }
         )
+        }
     }
     
 }
