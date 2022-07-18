@@ -17,7 +17,7 @@
             body: JSON.stringify({
                 date: new Date(),
                 time: "AM",
-                performedBy: $session.user._id,
+                performedBy: $session.user.id,
             }),
             ...defaultFetchProps
         })

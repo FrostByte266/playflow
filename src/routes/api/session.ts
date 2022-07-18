@@ -16,7 +16,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		return {
 			body: user,
 			headers: {
-				'Set-Cookie': cookie.serialize('token', token, { httpOnly: true })
+				'Set-Cookie': cookie.serialize('token', token, { httpOnly: true, path: '/' })
 			}
 		};
 	} else {

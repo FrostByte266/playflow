@@ -32,7 +32,7 @@
 		// rendered if there is a user selected
 		const res = await fetch('/api/session', {
 			method: 'POST',
-			credentials: 'include',
+			credentials: 'same-origin',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
 				id: selectedUser!.id,
