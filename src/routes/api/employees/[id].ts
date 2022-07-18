@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client'
 import prisma, { employeeSelectOpts } from '$lib/prisma'
 import Codes from 'http-status-codes'
 
-export const get: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params }) => {
     const user = await prisma.employee.findFirst({
         where: {
             id: Number(params.id)
@@ -25,7 +25,7 @@ export const get: RequestHandler = async ({ params }) => {
     }
 }
 
-export const patch: RequestHandler = async ({ request, params }) => {
+export const PATCH: RequestHandler = async ({ request, params }) => {
     try {
         const updated = await prisma.employee.update({
             where: {
@@ -63,7 +63,7 @@ export const patch: RequestHandler = async ({ request, params }) => {
     }
 }
 
-export const del: RequestHandler = async ({ params }) => {
+export const DELETE: RequestHandler = async ({ params }) => {
     try {
         await prisma.employee.delete({
             where: {

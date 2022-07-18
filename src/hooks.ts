@@ -19,7 +19,11 @@ export const handle: Handle = async ({ event, resolve }) => {
         return await resolve(event)
     }
     try {
-        const rawToken = cookie.parse(event.request.headers.get('cookie') || '').token
+        let rawToken = cookie.parse(event.request.headers.get('cookie') || '').token
+        if (!rawToken) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            rawToken = (event.request.headers.get('authorization') || '').split(':').at(-1)!
+        }
         const decoded = JWT.verify(rawToken, import.meta.env.VITE_JWT_SECRET) as Required<JWT.JwtPayload> & Employee
 
         // JWT expiry dates are expressed as UNIX epoch (seconds),
