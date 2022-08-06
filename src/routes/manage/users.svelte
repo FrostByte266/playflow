@@ -36,8 +36,8 @@
         })
         const data: IEmployee = await res.json()
 
-        const { name, ID, role } = data
-        employees = [{ name, ID, role }, ...employees]
+        const { name, id, role } = data
+        employees = [{ name, id, role }, ...employees]
     }
 </script>
 <svelte:head>
@@ -53,7 +53,7 @@
 
 <div class="grid-cols-3 auto-rows-auto items-center justify-center">
     <NewEmployee on:created={addNew} />
-    {#each employees as employee (employee.ID)}
+    {#each employees as employee (employee.id)}
         <!-- <EditableEmployee {employee} /> -->
         {JSON.stringify(employee)}
     {/each}

@@ -1,62 +1,36 @@
 import type { RequestHandler } from './__types/'
-import { Prisma } from '@prisma/client'
+import type { Issue } from '@prisma/client'
 
 import prisma from '$lib/prisma'
 import Codes from 'http-status-codes'
 
-export const GET: RequestHandler = async ({ params }) => {
-    const tap = await prisma.gameTap.findFirst({
-        where: {
-            id: Number(params.id)
-        }
-    })
-    if (tap) {
-        return {
-            body: tap
-        }
-    } else {
-        return {
-            status: Codes.NOT_FOUND,
-            body: {
-                error: 'The requested tap does not exist'
-            }
-        }
-    }
+type GameTapBody = {
+    create: Array<Issue>,
+    update: Array<Partial<Issue>>
 }
 
-export const PATCH: RequestHandler = async ({ request, params }) => {
+export const POST: RequestHandler = async ({ request }) => {
+    const { create, update } = await request.json() as GameTapBody
     try {
-        const updated = await prisma.gameTap.update({
-            where: {
-                id: Number(params.id)
-            }, 
-            data: await request.json(),
-        })
-
+        const createdIssues = await Promise.all(create.map(async issue => await prisma.issue.create({
+                data: issue
+            })))
+        const updatedIssues = await Promise.all(update.map(async issue => await prisma.issue.update({
+                where: { id: issue.id},
+                data: issue
+            })
+        ))
         return {
-            body: updated
+            body: {
+                created: createdIssues,
+                updated: updatedIssues
+            }
         }
 
-    } catch(e) {
-        if (e instanceof Prisma.PrismaClientKnownRequestError) {
-            switch (e.code) {
-                case 'P2025':
-                    return {
-                        status: Codes.NOT_FOUND,
-                        body: { error: 'The requested tap does not exist' }
-                    }
-                default:
-                    return {
-                        status: Codes.INTERNAL_SERVER_ERROR,
-                        body: { error: 'An unexpected database error has occured' }
-                    }
-            }
-        } else {
-            console.dir(e, {depth: null})
-            return {
-                status: Codes.INTERNAL_SERVER_ERROR,
-                body: { error: 'An unknown server error has occured' }
-            }
+    } catch (err) {
+        return {
+            status: Codes.INTERNAL_SERVER_ERROR,
+            body: { error: 'An unexpected database error has occured' }
         }
     }
 }

@@ -3,7 +3,7 @@ import type { RequestHandler } from './__types/'
 import prisma from '$lib/prisma'
 import Codes from 'http-status-codes'
 
-export const get: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params }) => {
     const issues = await prisma.issue.findMany({
         where: {
             gameId: Number(params.id)
@@ -22,7 +22,7 @@ export const get: RequestHandler = async ({ params }) => {
     }
 }
 
-export const post: RequestHandler = async ({ params, request }) => {
+export const POST: RequestHandler = async ({ params, request }) => {
     const newIssue = await prisma.issue.create({
         data: { gameId: Number(params.id), ...await request.json()}
     })

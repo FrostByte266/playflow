@@ -3,7 +3,7 @@ import type { RequestHandler } from './__types'
 import prisma from '$lib/prisma'
 import Codes from 'http-status-codes'
 
-export const get: RequestHandler = async () => {
+export const GET: RequestHandler = async () => {
     const all = await prisma.game.findMany({
         include: {
             issues: true
@@ -15,7 +15,7 @@ export const get: RequestHandler = async () => {
     }
 }
 
-export const post: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request }) => {
     const newEmployee = await prisma.game.create({
         data: await request.json()
     })

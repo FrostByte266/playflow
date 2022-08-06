@@ -9,7 +9,7 @@
 
     async function startTap(e: MouseEvent) {
         e.preventDefault()
-        const res = await fetch(apiRoute('/tap'), {
+        const res = await fetch('/api/tap', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

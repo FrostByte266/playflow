@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client'
 import prisma from '$lib/prisma'
 import Codes from 'http-status-codes'
 
-export const get: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params }) => {
     const issue = await prisma.issue.findFirst({
         where: {
             id: Number(params.issueId)
@@ -24,7 +24,7 @@ export const get: RequestHandler = async ({ params }) => {
     }
 }
 
-export const patch: RequestHandler = async ({ request, params }) => {
+export const PATCH: RequestHandler = async ({ request, params }) => {
     try {
         const updated = await prisma.issue.update({
             where: {
@@ -61,7 +61,7 @@ export const patch: RequestHandler = async ({ request, params }) => {
     }
 }
 
-export const del: RequestHandler = async ({ params }) => {
+export const DELETE: RequestHandler = async ({ params }) => {
     try {
         await prisma.issue.delete({
             where: {
