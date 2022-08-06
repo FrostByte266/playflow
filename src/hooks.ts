@@ -69,6 +69,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 export const getSession: GetSession = event => event.locals
 
-export const handleError: HandleError = async ({ error, event }) => {
+export const handleError: HandleError = async ({ error }) => {
     console.error(error)
 }
